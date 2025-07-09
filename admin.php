@@ -18,12 +18,7 @@ if (isset($_POST['password'])) {
     }
 }
 
-// Handle logout
-if (isset($_GET['logout'])) {
-    unset($_SESSION['is_admin']);
-    header('Location: admin.php');
-    exit;
-}
+// Old logout handling removed - now handled by logout.php
 
 // Function to get log data
 function getLogData() {
@@ -150,7 +145,7 @@ if ($is_admin && isset($_POST['clear_logs'])) {
             <h1>Admin Dashboard</h1>
             <div>
                 <a href="index.php" class="btn btn-outline"><i class="fas fa-home"></i> Home</a>
-                <a href="admin.php?logout=1" class="btn btn-outline"><i class="fas fa-sign-out-alt"></i> Logout</a>
+                <a href="logout.php" class="btn btn-outline"><i class="fas fa-sign-out-alt"></i> Logout</a>
             </div>
         </div>
         

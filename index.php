@@ -4,31 +4,7 @@ ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 require_once 'includes/auth.php';
 
-// Handle logout
-if (isset($_GET['logout'])) {
-    // Clear all session data
-    session_unset();
-    session_destroy();
-    
-    // Start a new session to ensure we have a clean state
-    session_start();
-    
-    // Clear any cookies related to the session
-    if (ini_get("session.use_cookies")) {
-        $params = session_get_cookie_params();
-        setcookie(session_name(), '', time() - 42000,
-            $params["path"], $params["domain"],
-            $params["secure"], $params["httponly"]
-        );
-    }
-    
-    // Set a flag to force a new GitHub authorization next time
-    $_SESSION['force_new_auth'] = true;
-    
-    // Redirect back to the index page
-    header('Location: index.php?new_login=1');
-    exit;
-}
+// Old logout handling removed - now handled by logout.php
 
 // Check if this is a new login request
 if (isset($_GET['new_login']) || isset($_POST['timestamp'])) {
@@ -40,7 +16,7 @@ if (isset($_GET['new_login']) || isset($_POST['timestamp'])) {
 }
 
 // Check if user is already logged in
-if (isLoggedIn() && !isset($_GET['new_login']) && !isset($_GET['logout'])) {
+if (isLoggedIn() && !isset($_GET['new_login']) && !isset($_GET['logged_out'])) {
     // If they're already logged in, redirect to wrapped.php
     header('Location: wrapped.php');
     exit;
@@ -66,6 +42,13 @@ if (isLoggedIn() && !isset($_GET['new_login']) && !isset($_GET['logout'])) {
             <p class="tagline">Discover your coding story</p>
         </div>
         
+        <?php if (isset($_GET['logged_out'])): ?>
+        <div class="logout-success">
+            <i class="fas fa-check-circle"></i>
+            <p>Successfully logged out! You can now login with a different GitHub account.</p>
+        </div>
+        <?php endif; ?>
+        
         <div class="login-features">
             <div class="feature">
                 <i class="fas fa-chart-pie"></i>
@@ -83,7 +66,7 @@ if (isLoggedIn() && !isset($_GET['new_login']) && !isset($_GET['logout'])) {
             </div>
         </div>
         
-        <a href="<?= getGitHubAuthUrl(false) ?>" class="github-login-btn">
+        <a href="<?= getGitHubAuthUrl(isset($_GET['logged_out']) || isset($_SESSION['force_github_login'])) ?>" class="github-login-btn">
             <i class="fab fa-github"></i>
             Connect with GitHub
         </a>

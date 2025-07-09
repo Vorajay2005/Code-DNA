@@ -16,7 +16,7 @@ function getGitHubAuthUrl($forceLogin = false) {
         'state' => $_SESSION['github_state']
     ];
     
-    // Only force login when explicitly requested via the Switch Account button
+    // Only force login when explicitly requested (like after logout)
     // or when the force_github_login flag is set
     $shouldForceLogin = $forceLogin || 
                        (isset($_SESSION['force_github_login']) && $_SESSION['force_github_login']);
@@ -289,7 +289,7 @@ function cacheData($key, $data) {
     $cacheDir = __DIR__ . '/../cache';
     
     if (!is_dir($cacheDir)) {
-        if (!mkdir($cacheDir, 0755, true)) {
+        if (!@mkdir($cacheDir, 0777, true)) {
             error_log("Failed to create cache directory: $cacheDir");
             return false;
         }

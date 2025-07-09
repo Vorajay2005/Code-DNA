@@ -121,8 +121,7 @@ try {
             </div>
             <div class="actions">
                 <button id="shareBtn" class="btn"><i class="fas fa-share-alt"></i> Share</button>
-                <a href="switch_account.php" class="btn btn-outline"><i class="fas fa-exchange-alt"></i> Switch Account</a>
-                <a href="index.php?logout=1" class="btn btn-outline"><i class="fas fa-sign-out-alt"></i> Logout</a>
+                <a href="logout.php" class="btn btn-outline"><i class="fas fa-sign-out-alt"></i> Logout</a>
                 <?php if (in_array($username, ['shehzad-epuratech', 'shehzad-epura'])): ?>
                 <a href="admin.php" class="btn btn-outline"><i class="fas fa-user-shield"></i> Admin</a>
                 <?php endif; ?>
@@ -233,7 +232,7 @@ try {
             clearTimeout(sessionTimeout);
             sessionTimeout = setTimeout(function() {
                 // Redirect to logout page after timeout
-                window.location.href = 'index.php?logout=1&reason=timeout';
+                window.location.href = 'logout.php?reason=timeout';
             }, SESSION_TIMEOUT_DURATION);
         }
         
