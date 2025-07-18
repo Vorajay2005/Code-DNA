@@ -1,6 +1,9 @@
 <?php
 require_once 'includes/auth.php';
 
+// Start output buffering to prevent headers already sent errors
+ob_start();
+
 // Start session
 session_start();
 
@@ -55,8 +58,9 @@ foreach ($cookiesToClear as $cookie) {
 // GitHub logout URL - this will log the user out from GitHub
 $githubLogoutUrl = 'https://github.com/logout';
 
-// Our application URL after logout
-$returnUrl = 'http://localhost/projects/code-dna/index.php?logged_out=1';
+// Our application URL after logout (use environment variable for production)
+$app_url = $_ENV['APP_URL'] ?? 'http://localhost/projects/code-dna';
+$returnUrl = $app_url . '/index.php?logged_out=1';
 
 // Create a form that will automatically submit to GitHub logout
 ?>
@@ -169,3 +173,7 @@ $returnUrl = 'http://localhost/projects/code-dna/index.php?logged_out=1';
     </script>
 </body>
 </html>
+<?php
+// Flush output buffer
+ob_end_flush();
+?>
