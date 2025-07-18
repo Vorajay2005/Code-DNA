@@ -4,8 +4,10 @@ require_once 'includes/auth.php';
 // Start output buffering to prevent headers already sent errors
 ob_start();
 
-// Start session
-session_start();
+// Start session if not already active
+if (session_status() == PHP_SESSION_NONE) {
+    session_start();
+}
 
 // Log the logout event
 $logDir = __DIR__ . '/logs';
@@ -31,7 +33,9 @@ session_unset();
 session_destroy();
 
 // Start a new session and set flags for forced login
-session_start();
+if (session_status() == PHP_SESSION_NONE) {
+    session_start();
+}
 $_SESSION['force_github_login'] = true;
 $_SESSION['force_new_auth'] = true;
 
